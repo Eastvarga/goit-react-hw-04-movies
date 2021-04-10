@@ -1,5 +1,6 @@
 import { Component } from "react";
-import ApiService from "../services/apiSerivces";
+import ApiService from "../services/apiServices";
+import { Link } from "react-router-dom";
 
 class MoviePage extends Component {
   state = {
@@ -7,24 +8,26 @@ class MoviePage extends Component {
     movies: [],
     page: 1,
   };
+
   handleChange = (event) => {
     const { name, value } = event.currentTarget;
     this.setState({ [name]: value });
   };
   searchSubmit = (event) => {
     event.preventDefault();
-    const { query, page, movies } = this.state;
+    const { query, page } = this.state;
     if (query !== "") {
       ApiService.fetchSearchMovie({ query: query, page: page }).then(
         ({ results }) => {
-          console.log("On Form submit results: ", results);
-          this.setState({ movies: [...movies, ...results] });
+          //   console.log("On Form submit results: ", results);
+          this.setState({ movies: [...results] });
         }
       );
     }
   };
 
   render() {
+    // console.log("search page props", this.props);
     const { movies } = this.state;
     return (
       <div>
@@ -42,7 +45,13 @@ class MoviePage extends Component {
         <ul>
           {movies.length > 0 &&
             movies.map(({ id, original_title }) => {
-              return <li key={id}>{original_title}</li>;
+              return (
+                <li key={id}>
+                  <Link to={`${this.props.match.url}/${id}`}>
+                    {original_title}
+                  </Link>
+                </li>
+              );
             })}
         </ul>
       </div>
