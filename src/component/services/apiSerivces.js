@@ -17,7 +17,26 @@ const fetchSearchMovie = ({ query, page }) => {
       `${serchFilter}?api_key=${key}&language=en-US&query=${query}&page=${page}`
     )
     .then(({ data }) => {
-      console.log(data);
+      //   console.log(data);
+      return data;
+    });
+};
+const fetchMovieDetails = (id, option) => {
+  let filter = "";
+  switch (option) {
+    case "cast":
+      filter = `/movie/${id}/credits`;
+      break;
+    case "reviews":
+      filter = `/movie/${id}/reviews`;
+      break;
+    default:
+      filter = `/movie/${id}`;
+  }
+  return axios
+    .get(`${filter}?api_key=${key}&language=en-US`)
+    .then(({ data }) => {
+      //   console.log("fetchMovieDetails", data);
       return data;
     });
 };
@@ -25,5 +44,6 @@ const fetchSearchMovie = ({ query, page }) => {
 const ApiService = {
   fetchTrendigMovies,
   fetchSearchMovie,
+  fetchMovieDetails,
 };
 export default ApiService;
