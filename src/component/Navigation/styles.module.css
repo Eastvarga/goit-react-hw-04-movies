@@ -1,0 +1,13 @@
+.navigation {
+  display: flex;
+  /* width: auto; */
+  flex-wrap: nowrap;
+  list-style: none;
+  margin: 0;
+  margin-bottom: 10px;
+  padding: 20px;
+}
+.navigation > li {
+  margin-right: 20px;
+  padding: 10px;
+}
