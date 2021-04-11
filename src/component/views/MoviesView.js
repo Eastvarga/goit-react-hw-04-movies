@@ -3,8 +3,8 @@ import { Component } from "react";
 
 class MoviesView extends Component {
   render() {
-    // console.log("MoviesView props", this.props);
-    return <MoviesPage {...this.props} />;
+    // console.log("MoviesView props", this.props);{...this.props}
+    return <MoviesPage />;
   }
 }
 
