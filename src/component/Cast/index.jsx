@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
 class Cast extends Component {
   state = {
@@ -16,7 +17,7 @@ class Cast extends Component {
     // console.log("Cast props", this.props);
     return (
       <ul>
-        {this.state.cast.length > 0 &&
+        {this.state.cast.length > 0 ? (
           this.state.cast.map(
             ({ id, profile_path, original_name, character }) => {
               return (
@@ -31,10 +32,13 @@ class Cast extends Component {
                 </li>
               );
             }
-          )}
+          )
+        ) : (
+          <li>Ops, there are no data</li>
+        )}
       </ul>
     );
   }
 }
 
-export default Cast;
+export default withRouter(Cast);
