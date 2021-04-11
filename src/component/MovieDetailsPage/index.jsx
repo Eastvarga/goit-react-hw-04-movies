@@ -1,11 +1,16 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
+import Reviews from "../Reviews";
+import Cast from "../Cast";
+import { Link, Route, Switch, withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
-class MovieDetails extends Component {
+import routes from "../../routes";
+class MovieDetailsPage extends Component {
   state = {
     movieDetails: null,
+    location: null,
   };
   componentDidMount() {
+    this.setState({ location: this.props.location });
     //   console.log(
     //     "movieDetails componentDidMount",
     //     this.props.match.params.movieId
@@ -17,13 +22,25 @@ class MovieDetails extends Component {
       }
     );
   }
+  goBackHandler = () => {
+    const { history } = this.props;
+    const { location } = this.state;
+    console.log("history", history);
+    if (location.state && location.state.from) {
+      history.push(location.state.from);
+      return;
+    }
+    history.push(routes.home);
+  };
   render() {
     // console.log("MovieDetails render this.state", this.state);
     // console.log("MovieDetails props", this.props);
     // const { title, vote_average, overview, genres } = this.state.movieDetails;
     return (
       <div>
-        <button type="button">Go back</button>
+        <button type="button" onClick={this.goBackHandler}>
+          Go back
+        </button>
         {this.state.movieDetails && (
           <div>
             <img
@@ -60,9 +77,16 @@ class MovieDetails extends Component {
             </li>
           </ul>
         </div>
+        <Switch>
+          <Route path={`${this.props.match.path}/cast`} component={Cast} />
+          <Route
+            path={`${this.props.match.path}/reviews`}
+            component={Reviews}
+          />
+        </Switch>
       </div>
     );
   }
 }
 
-export default MovieDetails;
+export default withRouter(MovieDetailsPage);
