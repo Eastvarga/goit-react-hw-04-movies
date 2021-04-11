@@ -1,6 +1,7 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
+import MoviesList from "../MoviesList";
 class HomePage extends Component {
   state = {
     movies: [],
@@ -12,19 +13,11 @@ class HomePage extends Component {
     });
   }
   render() {
-    const movies = this.state.movies;
+    const { movies } = this.state;
     // console.log("HomePage props", this.props);
-    return (
-      <ul>
-        {movies.length > 0 &&
-          movies.map(({ original_title, id }) => (
-            <li key={id}>
-              <Link to={`/movies/${id}`}>{original_title}</Link>
-            </li>
-          ))}
-      </ul>
-    );
+    return <MoviesList movies={movies} />;
+    
   }
 }
 
-export default HomePage;
+export default withRouter(HomePage);
