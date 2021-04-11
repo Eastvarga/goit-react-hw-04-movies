@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
 class Rewiews extends Component {
   state = {
@@ -16,7 +17,7 @@ class Rewiews extends Component {
   render() {
     return (
       <ul>
-        {this.state.reviews.length > 0 &&
+        {this.state.reviews.length > 0 ? (
           this.state.reviews.map(({ author, content, id }) => {
             return (
               <li key={id}>
@@ -24,10 +25,13 @@ class Rewiews extends Component {
                 <p>{content}</p>
               </li>
             );
-          })}
+          })
+        ) : (
+          <li>Ops, there are no data</li>
+        )}
       </ul>
     );
   }
 }
 
-export default Rewiews;
+export default withRouter(Rewiews);
