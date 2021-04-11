@@ -1,6 +1,11 @@
 import { Component } from "react";
 import ApiService from "../services/apiServices";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import MoviesList from "../MoviesList";
+import queryString from "query-string";
+
+const getCategoryFromProps = (props) =>
+  queryString.parse(props.location.search).query;
 
 class MoviePage extends Component {
   state = {
@@ -8,21 +13,47 @@ class MoviePage extends Component {
     movies: [],
     page: 1,
   };
-
-  handleChange = (event) => {
-    const { name, value } = event.currentTarget;
-    this.setState({ [name]: value });
-  };
-  searchSubmit = (event) => {
-    event.preventDefault();
-    const { query, page } = this.state;
-    if (query !== "") {
+  componentDidMount() {
+    const query = getCategoryFromProps(this.props);
+    console.log("query before if", query);
+    // console.log("this.props before if", this.props);
+    if (query) {
+      console.log("query IN if", query);
+      const { page } = this.state;
       ApiService.fetchSearchMovie({ query: query, page: page }).then(
         ({ results }) => {
           //   console.log("On Form submit results: ", results);
           this.setState({ movies: [...results] });
         }
       );
+    }
+  }
+  componentDidUpdate(prevProps) {
+    const prevQuery = getCategoryFromProps(prevProps);
+    const nextQuery = getCategoryFromProps(this.props);
+    console.log("nextQuery", nextQuery);
+    if (prevQuery !== nextQuery) {
+      const { page } = this.state;
+      ApiService.fetchSearchMovie({ query: nextQuery, page: page }).then(
+        ({ results }) => {
+          //   console.log("On Form submit results: ", results);
+          this.setState({ movies: [...results] });
+        }
+      );
+    }
+  }
+  handleChange = (event) => {
+    const { name, value } = event.currentTarget;
+    this.setState({ [name]: value });
+  };
+  searchSubmit = (event) => {
+    event.preventDefault();
+    const { query } = this.state;
+    if (query !== "") {
+      this.props.history.push({
+        pathname: this.props.location.pathname,
+        search: `query=${query}`,
+      });
     }
   };
 
@@ -42,21 +73,10 @@ class MoviePage extends Component {
           </label>
           <button type="submit">Search</button>
         </form>
-        <ul>
-          {movies.length > 0 &&
-            movies.map(({ id, original_title }) => {
-              return (
-                <li key={id}>
-                  <Link to={`${this.props.match.url}/${id}`}>
-                    {original_title}
-                  </Link>
-                </li>
-              );
-            })}
-        </ul>
+        <MoviesList movies={movies} />
       </div>
     );
   }
 }
 
-export default MoviePage;
+export default withRouter(MoviePage);
