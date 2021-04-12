@@ -10,6 +10,7 @@ import AppBar from "./component/AppBar";
 // import MovieDetailsView from "./component/views/MovieDetailsView";
 import routes from "./routes";
 import "modern-normalize/modern-normalize.css";
+import "./index.css";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
@@ -29,7 +30,7 @@ const MovieDetailsPage = lazy(() =>
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div className="container App">
         <AppBar />
         <Suspense
           fallback={
