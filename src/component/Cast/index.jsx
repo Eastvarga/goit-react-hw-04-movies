@@ -7,15 +7,28 @@ class Cast extends Component {
   state = {
     cast: [],
     isLoading: false,
+    isEmpty: false,
   };
   componentDidMount() {
     this.toggleSpinner(this.state);
     ApiService.fetchMovieDetails(this.props.match.params.movieId, "cast")
       .then(({ cast }) => {
         // console.log("Cast fetch data", cast);
+        this.checkForEmpty(cast);
         this.setState({ cast: cast });
       })
+      .catch((error) => {
+        console.log("Cast", error);
+        this.toggleSpinner(this.state);
+      })
       .finally(() => this.toggleSpinner(this.state));
+  }
+  checkForEmpty(array) {
+    if (array.length > 0) {
+      this.setState({ isEmpty: false });
+      return;
+    }
+    this.setState({ isEmpty: true });
   }
   toggleSpinner({ isLoading }) {
     this.setState({ isLoading: !isLoading });
@@ -24,10 +37,10 @@ class Cast extends Component {
     // console.log("Cast props", this.props);
     return (
       <ul>
-        {this.state.cast.length > 0 && this.state.isLoading && (
+        {this.state.isLoading && (
           <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
         )}
-        {!this.state.isLoading && this.state.cast.length > 0 ? (
+        {this.state.cast.length > 0 &&
           this.state.cast.map(
             ({ id, profile_path, original_name, character }) => {
               return (
@@ -42,10 +55,8 @@ class Cast extends Component {
                 </li>
               );
             }
-          )
-        ) : (
-          <li>Ops, there are no data</li>
-        )}
+          )}
+        {this.state.isEmpty && <li>Ops, there are no data</li>}
       </ul>
     );
   }
