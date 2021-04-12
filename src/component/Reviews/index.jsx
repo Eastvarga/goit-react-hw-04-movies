@@ -7,12 +7,14 @@ class Rewiews extends Component {
   state = {
     reviews: [],
     isLoading: false,
+    isEmpty: false,
   };
   componentDidMount() {
     this.toggleSpinner(this.state);
     ApiService.fetchMovieDetails(this.props.match.params.movieId, "reviews")
       .then(({ results }) => {
         //   console.log("Rewiews fetch data", results);
+        this.checkForEmpty(results);
         this.setState({ reviews: results });
       })
       .catch((error) => {
@@ -21,16 +23,23 @@ class Rewiews extends Component {
       })
       .finally(() => this.toggleSpinner(this.state));
   }
+  checkForEmpty(array) {
+    if (array.length > 0) {
+      this.setState({ isEmpty: false });
+      return;
+    }
+    this.setState({ isEmpty: true });
+  }
   toggleSpinner({ isLoading }) {
     this.setState({ isLoading: !isLoading });
   }
   render() {
     return (
       <ul>
-        {this.state.reviews.length > 0 && this.state.isLoading && (
+        {this.state.isLoading && (
           <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
         )}
-        {this.state.reviews.length > 0 ? (
+        {this.state.reviews.length > 0 &&
           this.state.reviews.map(({ author, content, id }) => {
             return (
               <li key={id}>
@@ -38,10 +47,8 @@ class Rewiews extends Component {
                 <p>{content}</p>
               </li>
             );
-          })
-        ) : (
-          <li>Ops, there are no data</li>
-        )}
+          })}
+        {this.state.isEmpty && <li>Ops, there are no data</li>}
       </ul>
     );
   }
