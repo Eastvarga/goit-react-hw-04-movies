@@ -68,17 +68,23 @@ class MoviePage extends Component {
     // console.log("search page props", this.props);
     const { movies, isLoading, query } = this.state;
     return (
-      <div>
-        <form onSubmit={this.searchSubmit}>
-          <label>
+      <div className="container">
+        <form
+          onSubmit={this.searchSubmit}
+          className="mb-3 row align-items-start"
+        >
+          <label className="label">
             <input
               type="text"
               name="query"
               value={query}
               onChange={this.handleChange}
+              className="form-control form-control-sm"
             />
           </label>
-          <button type="submit">Search</button>
+          <button type="submit" className="btn btn-primary ml-2 btn-sm">
+            Search
+          </button>
         </form>
         {movies.length > 0 && isLoading && (
           <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
