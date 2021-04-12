@@ -4,10 +4,14 @@ import Cast from "../Cast";
 import { Link, Route, Switch, withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
 import routes from "../../routes";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 class MovieDetailsPage extends Component {
   state = {
     movieDetails: null,
     location: null,
+    isLoading: false,
   };
   componentDidMount() {
     this.setState({ location: this.props.location });
@@ -15,17 +19,21 @@ class MovieDetailsPage extends Component {
     //     "movieDetails componentDidMount",
     //     this.props.match.params.movieId
     //   );
-    ApiService.fetchMovieDetails(this.props.match.params.movieId).then(
-      (data) => {
+    this.toggleSpinner(this.state);
+    ApiService.fetchMovieDetails(this.props.match.params.movieId)
+      .then((data) => {
         // console.log("data movieDetails", data);
         this.setState({ movieDetails: data });
-      }
-    );
+      })
+      .finally(() => this.toggleSpinner(this.state));
+  }
+  toggleSpinner({ isLoading }) {
+    this.setState({ isLoading: !isLoading });
   }
   goBackHandler = () => {
     const { history } = this.props;
     const { location } = this.state;
-    console.log("history", history);
+    // console.log("history", history);
     if (location.state && location.state.from) {
       history.push(location.state.from);
       return;
@@ -41,6 +49,9 @@ class MovieDetailsPage extends Component {
         <button type="button" onClick={this.goBackHandler}>
           Go back
         </button>
+        {this.state.isLoading && (
+          <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
+        )}
         {this.state.movieDetails && (
           <div>
             <img
