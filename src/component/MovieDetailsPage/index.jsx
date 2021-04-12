@@ -53,27 +53,32 @@ class MovieDetailsPage extends Component {
     // const { title, vote_average, overview, genres } = this.state.movieDetails;
     return (
       <div>
-        <button type="button" onClick={this.goBackHandler}>
+        <button
+          type="button"
+          onClick={this.goBackHandler}
+          className="btn btn-primary btn-sm mb-3 shadow rounded"
+        >
           Go back
         </button>
         {this.state.isLoading && (
           <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
         )}
         {this.state.movieDetails && (
-          <div>
+          <div className="d-flex border">
             <img
               width="400"
               src={`https://image.tmdb.org/t/p/w780${this.state.movieDetails.backdrop_path}`}
-              alt=""
+              alt={this.state.movieDetails.title}
+              className="img-fluid"
             />
-            <div>
+            <div className="ml-3">
               <h2>{this.state.movieDetails.title}</h2>
               <p>
                 User Score: {Number(this.state.movieDetails.vote_average) * 10}%
               </p>
-              <h3>Overview</h3>
+              <h5>Overview</h5>
               <p>{this.state.movieDetails.overview}</p>
-              <h3>Genres</h3>
+              <h5 className="fs-6">Genres</h5>
               <p>
                 {this.state.movieDetails.genres.reduce(
                   (acc, { name }) => acc + " " + name,
@@ -84,8 +89,8 @@ class MovieDetailsPage extends Component {
           </div>
         )}
 
-        <div>
-          <p>Additional information</p>
+        <div className="border pt-2 mb-2">
+          <p className="pl-2">Additional information</p>
           <ul>
             <li>
               <Link to={`${this.props.match.url}/cast`}>Cast</Link>
