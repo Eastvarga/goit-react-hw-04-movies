@@ -1,11 +1,18 @@
-import { Component } from "react";
-import Reviews from "../Reviews";
-import Cast from "../Cast";
+import { Component, lazy, Suspense } from "react";
+// import Reviews from "../Reviews";
+// import Cast from "../Cast";
 import { Link, Route, Switch, withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
 import routes from "../../routes";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+const Cast = lazy(() =>
+  import("../Cast/index.jsx" /* webpackChunkName: "Cast component" */)
+);
+const Reviews = lazy(() =>
+  import("../Reviews/index.jsx" /* webpackChunkName: "Reviews component" */)
+);
 
 class MovieDetailsPage extends Component {
   state = {
@@ -88,13 +95,19 @@ class MovieDetailsPage extends Component {
             </li>
           </ul>
         </div>
-        <Switch>
-          <Route path={`${this.props.match.path}/cast`} component={Cast} />
-          <Route
-            path={`${this.props.match.path}/reviews`}
-            component={Reviews}
-          />
-        </Switch>
+        <Suspense
+          fallback={
+            <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
+          }
+        >
+          <Switch>
+            <Route path={`${this.props.match.path}/cast`} component={Cast} />
+            <Route
+              path={`${this.props.match.path}/reviews`}
+              component={Reviews}
+            />
+          </Switch>
+        </Suspense>
       </div>
     );
   }
