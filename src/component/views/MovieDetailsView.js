@@ -10,18 +10,6 @@ class MovieDetailsView extends Component {
     return (
       <>
         <MovieDetailsPage />
-        {/* <div>
-          <p>Additional information</p>
-          <ul>
-            <li>
-              <Link to={`${this.props.match.url}/cast`}>Cast</Link>
-            </li>
-            <li>
-              <Link to={`${this.props.match.url}/reviews`}>Reviews</Link>
-            </li>
-          </ul>
-        </div> */}
-       
       </>
     );
   }
