@@ -3,6 +3,8 @@ import ApiService from "../services/apiServices";
 import { withRouter } from "react-router-dom";
 import MoviesList from "../MoviesList";
 import queryString from "query-string";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const getCategoryFromProps = (props) =>
   queryString.parse(props.location.search).query;
@@ -12,34 +14,37 @@ class MoviePage extends Component {
     query: "",
     movies: [],
     page: 1,
+    isLoading: false,
   };
   componentDidMount() {
     const query = getCategoryFromProps(this.props);
-    console.log("query before if", query);
+    // console.log("query before if", query);
     // console.log("this.props before if", this.props);
     if (query) {
-      console.log("query IN if", query);
+      // console.log("query IN if", query);
       const { page } = this.state;
-      ApiService.fetchSearchMovie({ query: query, page: page }).then(
-        ({ results }) => {
+      this.toggleSpinner(this.state);
+      ApiService.fetchSearchMovie({ query: query, page: page })
+        .then(({ results }) => {
           //   console.log("On Form submit results: ", results);
           this.setState({ movies: [...results] });
-        }
-      );
+        })
+        .finally(() => this.toggleSpinner(this.state));
     }
   }
   componentDidUpdate(prevProps) {
     const prevQuery = getCategoryFromProps(prevProps);
     const nextQuery = getCategoryFromProps(this.props);
-    console.log("nextQuery", nextQuery);
+    // console.log("nextQuery", nextQuery);
     if (prevQuery !== nextQuery) {
       const { page } = this.state;
-      ApiService.fetchSearchMovie({ query: nextQuery, page: page }).then(
-        ({ results }) => {
+      this.toggleSpinner(this.state);
+      ApiService.fetchSearchMovie({ query: nextQuery, page: page })
+        .then(({ results }) => {
           //   console.log("On Form submit results: ", results);
           this.setState({ movies: [...results] });
-        }
-      );
+        })
+        .finally(() => this.toggleSpinner(this.state));
     }
   }
   handleChange = (event) => {
@@ -56,10 +61,12 @@ class MoviePage extends Component {
       });
     }
   };
-
+  toggleSpinner({ isLoading }) {
+    this.setState({ isLoading: !isLoading });
+  }
   render() {
     // console.log("search page props", this.props);
-    const { movies } = this.state;
+    const { movies, isLoading, query } = this.state;
     return (
       <div>
         <form onSubmit={this.searchSubmit}>
@@ -67,13 +74,16 @@ class MoviePage extends Component {
             <input
               type="text"
               name="query"
-              value={this.state.query}
+              value={query}
               onChange={this.handleChange}
             />
           </label>
           <button type="submit">Search</button>
         </form>
-        <MoviesList movies={movies} />
+        {movies.length > 0 && isLoading && (
+          <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
+        )}
+        {!isLoading && <MoviesList movies={movies} />}
       </div>
     );
   }
