@@ -2,6 +2,7 @@ import { Component } from "react";
 import { withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
 import Loader from "react-loader-spinner";
+import PropTypes from "prop-types";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 class Cast extends Component {
   state = {
@@ -61,5 +62,11 @@ class Cast extends Component {
     );
   }
 }
-
+Cast.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.exact({
+      movieId: PropTypes.string.isRequired,
+    }),
+  }),
+};
 export default withRouter(Cast);
