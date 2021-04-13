@@ -5,6 +5,7 @@ import { Link, Route, Switch, withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
 import routes from "../../routes";
 import Loader from "react-loader-spinner";
+import PropTypes from "prop-types";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const Cast = lazy(() =>
@@ -51,6 +52,7 @@ class MovieDetailsPage extends Component {
     // console.log("MovieDetails render this.state", this.state);
     // console.log("MovieDetails props", this.props);
     // const { title, vote_average, overview, genres } = this.state.movieDetails;
+    const { path, url } = this.props.match;
     return (
       <div>
         <button
@@ -93,10 +95,10 @@ class MovieDetailsPage extends Component {
           <p className="pl-2">Additional information</p>
           <ul>
             <li>
-              <Link to={`${this.props.match.url}/cast`}>Cast</Link>
+              <Link to={`${url}/cast`}>Cast</Link>
             </li>
             <li>
-              <Link to={`${this.props.match.url}/reviews`}>Reviews</Link>
+              <Link to={`${url}/reviews`}>Reviews</Link>
             </li>
           </ul>
         </div>
@@ -106,16 +108,23 @@ class MovieDetailsPage extends Component {
           }
         >
           <Switch>
-            <Route path={`${this.props.match.path}/cast`} component={Cast} />
-            <Route
-              path={`${this.props.match.path}/reviews`}
-              component={Reviews}
-            />
+            <Route path={`${path}/cast`} component={Cast} />
+            <Route path={`${path}/reviews`} component={Reviews} />
           </Switch>
         </Suspense>
       </div>
     );
   }
 }
-
+MovieDetailsPage.propTypes = {
+  location: PropTypes.object,
+  history: PropTypes.object,
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    params: PropTypes.exact({
+      movieId: PropTypes.string.isRequired,
+    }),
+  }),
+};
 export default withRouter(MovieDetailsPage);
