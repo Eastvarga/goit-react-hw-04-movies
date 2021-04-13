@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
 class MoviesList extends Component {
   render() {
     const { movies } = this.props;
@@ -24,5 +25,13 @@ class MoviesList extends Component {
     );
   }
 }
-
+MoviesList.propTypes = {
+  location: PropTypes.object,
+  movies: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      original_title: PropTypes.string,
+    })
+  ),
+};
 export default withRouter(MoviesList);
