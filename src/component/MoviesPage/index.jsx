@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import MoviesList from "../MoviesList";
 import queryString from "query-string";
 import Loader from "react-loader-spinner";
+import PropTypes from "prop-types";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const getCategoryFromProps = (props) =>
@@ -94,5 +95,16 @@ class MoviePage extends Component {
     );
   }
 }
-
+MoviePage.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string,
+    pathname: PropTypes.string,
+  }),
+  history: PropTypes.shape({
+    location: PropTypes.shape({
+      search: PropTypes.string,
+      pathname: PropTypes.string,
+    }),
+  }),
+};
 export default withRouter(MoviePage);
