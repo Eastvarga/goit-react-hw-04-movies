@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import ApiService from "../services/apiServices";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import PropTypes from "prop-types";
 class Rewiews extends Component {
   state = {
     reviews: [],
@@ -43,7 +44,7 @@ class Rewiews extends Component {
           this.state.reviews.map(({ author, content, id }) => {
             return (
               <li key={id}>
-                <h3>Autor: {author}</h3>
+                <h5>Autor: {author}</h5>
                 <p>{content}</p>
               </li>
             );
@@ -53,5 +54,11 @@ class Rewiews extends Component {
     );
   }
 }
-
+Rewiews.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.exact({
+      movieId: PropTypes.string.isRequired,
+    }),
+  }),
+};
 export default withRouter(Rewiews);
