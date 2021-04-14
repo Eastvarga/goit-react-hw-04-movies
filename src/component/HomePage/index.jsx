@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { withRouter } from "react-router-dom";
-import ApiService from "../services/apiServices";
+import ApiService from "../../services/apiServices";
 import MoviesList from "../MoviesList";
 class HomePage extends Component {
   state = {

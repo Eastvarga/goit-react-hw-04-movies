@@ -1,5 +1,5 @@
 import { Component } from "react";
-import ApiService from "../services/apiServices";
+import ApiService from "../../services/apiServices";
 import { withRouter } from "react-router-dom";
 import MoviesList from "../MoviesList";
 import queryString from "query-string";

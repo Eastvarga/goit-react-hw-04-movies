@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { withRouter } from "react-router-dom";
-import ApiService from "../services/apiServices";
+import ApiService from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import PropTypes from "prop-types";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -36,28 +36,27 @@ class Cast extends Component {
   }
   render() {
     // console.log("Cast props", this.props);
+    const { isLoading, cast, isEmpty } = this.state;
     return (
       <ul>
-        {this.state.isLoading && (
+        {isLoading && (
           <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
         )}
-        {this.state.cast.length > 0 &&
-          this.state.cast.map(
-            ({ id, profile_path, original_name, character }) => {
-              return (
-                <li key={id}>
-                  <img
-                    width="120"
-                    src={`https://image.tmdb.org/t/p/w154${profile_path}`}
-                    alt=""
-                  />
-                  <p>{original_name}</p>
-                  <p>Character: {character}</p>
-                </li>
-              );
-            }
-          )}
-        {this.state.isEmpty && <li>Ops, there are no data</li>}
+        {cast.length > 0 &&
+          cast.map(({ id, profile_path, original_name, character }) => {
+            return (
+              <li key={id}>
+                <img
+                  width="120"
+                  src={`https://image.tmdb.org/t/p/w154${profile_path}`}
+                  alt=""
+                />
+                <p>{original_name}</p>
+                <p>Character: {character}</p>
+              </li>
+            );
+          })}
+        {isEmpty && <li>Ops, there are no data</li>}
       </ul>
     );
   }

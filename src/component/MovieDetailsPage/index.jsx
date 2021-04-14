@@ -2,7 +2,7 @@ import { Component, lazy, Suspense } from "react";
 // import Reviews from "../Reviews";
 // import Cast from "../Cast";
 import { Link, Route, Switch, withRouter } from "react-router-dom";
-import ApiService from "../services/apiServices";
+import ApiService from "../../services/apiServices";
 import routes from "../../routes";
 import Loader from "react-loader-spinner";
 import PropTypes from "prop-types";

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { withRouter } from "react-router-dom";
-import ApiService from "../services/apiServices";
+import ApiService from "../../services/apiServices";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import PropTypes from "prop-types";
@@ -35,13 +35,14 @@ class Rewiews extends Component {
     this.setState({ isLoading: !isLoading });
   }
   render() {
+    const { isLoading, reviews, isEmpty } = this.state;
     return (
       <ul>
-        {this.state.isLoading && (
+        {isLoading && (
           <Loader type="TailSpin" color="#00BFFF" height={40} width={40} />
         )}
-        {this.state.reviews.length > 0 &&
-          this.state.reviews.map(({ author, content, id }) => {
+        {reviews.length > 0 &&
+          reviews.map(({ author, content, id }) => {
             return (
               <li key={id}>
                 <h5>Autor: {author}</h5>
@@ -49,7 +50,7 @@ class Rewiews extends Component {
               </li>
             );
           })}
-        {this.state.isEmpty && <li>Ops, there are no data</li>}
+        {isEmpty && <li>Ops, there are no data</li>}
       </ul>
     );
   }
