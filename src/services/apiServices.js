@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import key from "../../apiHandle";
+import key from "./apiHandle";
 const trendingFilter = "/trending/movie/week";
 const serchFilter = "/search/movie";
 axios.defaults.baseURL = "https://api.themoviedb.org/3";
